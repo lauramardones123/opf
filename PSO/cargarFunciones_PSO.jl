@@ -13,6 +13,9 @@ include("./gestorResultados_PSO.jl")            # Imprimir los resultados del AC
 
 include("../Funciones/limpiarTerminal.jl")      # Limpiar la terminal
 
+include("./pso_hibrido.jl")                     # Cargar todas las funciones relacionadas con el PSO híbrido
+include("./evaluarTensiones.jl")                # Cargar funciones de evaluación de tensiones
+
 
 
 
