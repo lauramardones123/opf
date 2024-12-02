@@ -5,17 +5,17 @@ include("./evaluarTensiones.jl")
 mutable struct ParticleHibrida
     nGeneradores::Int
     
-    # Posiciones binarias (on/off de generadores)
-    position_bin::Array{Float64, 1}
-    velocity_bin::Array{Float64, 1}
-    pBest_bin::Array{Float64, 1}
-    lBest_bin::Array{Float64, 1}
+    # Estado de los generadores (u)
+    position_u::Array{Float64, 1}  # Valores continuos [0,1]
+    velocity_u::Array{Float64, 1}
+    pBest_u::Array{Float64, 1}
+    lBest_u::Array{Float64, 1}
     
-    # Posiciones continuas (potencias de generadores)
-    position_pot::Array{Float64, 2}  # Matriz nx2 (P y Q para cada generador)
-    velocity_pot::Array{Float64, 2}
-    pBest_pot::Array{Float64, 2}
-    lBest_pot::Array{Float64, 2}
+    # Potencias de generadores (PG)
+    position_pg::Array{Float64, 2}  # Matriz nx2 (P y Q)
+    velocity_pg::Array{Float64, 2}
+    pBest_pg::Array{Float64, 2}
+    lBest_pg::Array{Float64, 2}
     
     # Valores de fitness
     fitValue::Float64
@@ -25,31 +25,31 @@ mutable struct ParticleHibrida
     nFitEval::Int
     
     function ParticleHibrida(nGeneradores::Int, datosGenerador::DataFrame) 
-        # Inicialización binaria
-        position_bin = rand(0:1.0, nGeneradores)
-        velocity_bin = rand(nGeneradores) - position_bin
-        pBest_bin = copy(position_bin)
-        lBest_bin = copy(position_bin)
+        # Inicialización de estados (u)
+        position_u = rand(nGeneradores)  # Valores continuos entre 0 y 1
+        velocity_u = rand(nGeneradores) .- 0.5  # Velocidades iniciales centradas en 0
+        pBest_u = copy(position_u)
+        lBest_u = copy(position_u)
         
         # Inicialización de potencias
-        position_pot = zeros(Float64, nGeneradores, 2)
-        velocity_pot = zeros(Float64, nGeneradores, 2)
+        position_pg = zeros(Float64, nGeneradores, 2)
+        velocity_pg = zeros(Float64, nGeneradores, 2)
         
-        # Inicializar potencias dentro de límites
+        # Inicializar potencias dentro de límites para todos los generadores
         for i in 1:nGeneradores
             # Potencia activa
             Pmin = datosGenerador.P_MIN[i]
             Pmax = datosGenerador.P_MAX[i]
-            position_pot[i,1] = Pmin + rand()*(Pmax - Pmin)
+            position_pg[i,1] = Pmin + rand()*(Pmax - Pmin)
             
             # Potencia reactiva
             Qmin = datosGenerador.Q_MIN[i]
             Qmax = datosGenerador.Q_MAX[i]
-            position_pot[i,2] = Qmin + rand()*(Qmax - Qmin)
+            position_pg[i,2] = Qmin + rand()*(Qmax - Qmin)
         end
         
-        pBest_pot = copy(position_pot)
-        lBest_pot = copy(position_pot)
+        pBest_pg = copy(position_pg)
+        lBest_pg = copy(position_pg)
         
         fitValue = Inf
         fitpBest = Inf
@@ -57,11 +57,47 @@ mutable struct ParticleHibrida
         
         nFitEval = 0
         
-        new(nGeneradores, position_bin, velocity_bin, pBest_bin, lBest_bin,
-            position_pot, velocity_pot, pBest_pot, lBest_pot,
+        new(nGeneradores, position_u, velocity_u, pBest_u, lBest_u,
+            position_pg, velocity_pg, pBest_pg, lBest_pg,
             fitValue, fitpBest, fitlBest, nFitEval)
-        # println("ParticleHibrida creada")
     end       
+end
+
+function updatePosition!(p::ParticleHibrida, w::Float64, c1::Float64, c2::Float64, datos::Tuple)
+    datosGenerador = datos[2]
+    
+    # Actualizar velocidades de u
+    p.velocity_u = w * p.velocity_u + 
+                  c1 * rand() * (p.pBest_u - p.position_u) + 
+                  c2 * rand() * (p.lBest_u - p.position_u)
+    
+    # Actualizar posiciones de u
+    p.position_u += p.velocity_u
+    p.position_u = clamp.(p.position_u, 0.0, 1.0)
+    
+    # Actualizar velocidades y posiciones de PG según máscara
+    for i in 1:p.nGeneradores
+        if p.position_u[i] >= 0.5
+            # Actualizar velocidad y posición solo si el generador está activo
+            p.velocity_pg[i,:] = w * p.velocity_pg[i,:] + 
+                                c1 * rand() * (p.pBest_pg[i,:] - p.position_pg[i,:]) + 
+                                c2 * rand() * (p.lBest_pg[i,:] - p.position_pg[i,:])
+            
+            p.position_pg[i,:] += p.velocity_pg[i,:]
+            
+            # Limitar potencias a sus rangos
+            p.position_pg[i,1] = clamp(p.position_pg[i,1], 
+                                     datosGenerador.P_MIN[i], 
+                                     datosGenerador.P_MAX[i])
+            p.position_pg[i,2] = clamp(p.position_pg[i,2], 
+                                     datosGenerador.Q_MIN[i], 
+                                     datosGenerador.Q_MAX[i])
+        else
+            # Si el generador está inactivo, solo poner velocidad a cero
+            p.velocity_pg[i,:] .= 0.0
+            # Las potencias mantienen sus valores anteriores
+        end
+    end
 end
 
 mutable struct SwarmHibrido
@@ -80,8 +116,8 @@ mutable struct SwarmHibrido
     wMin::Float
     w::Float
     
-    gBest_bin::Array{Float64, 1}    
-    gBest_pot::Array{Float64, 2}
+    gBest_u::Array{Float64, 1}
+    gBest_pg::Array{Float64, 2}
     fitgBest::Float64
     
     particles::Array{ParticleHibrida, 1}
@@ -106,46 +142,15 @@ mutable struct SwarmHibrido
         particles = [ParticleHibrida(nGeneradores, datosGenerador) for i in 1:nParticle]
         
         # Inicializar mejores globales
-        gBest_bin = rand(0:1.0, nGeneradores)
-        gBest_pot = zeros(Float64, nGeneradores, 2)
+        gBest_u = rand(nGeneradores)
+        gBest_pg = zeros(Float64, nGeneradores, 2)
         fitgBest = Inf
         
         nFitEvals = 0
         
         new(fitFunc, nGeneradores, datos, nParticle, nNeibor, nInter,
-            c1, c2, wMax, wMin, w, gBest_bin, gBest_pot, fitgBest,
+            c1, c2, wMax, wMin, w, gBest_u, gBest_pg, fitgBest,
             particles, nFitEvals)
-    end
-end
-
-function updatePosition!(p::ParticleHibrida, w::Float64, c1::Float64, c2::Float64, datos::Tuple)
-    # Actualizar velocidades
-    p.velocity_bin = w * p.velocity_bin + 
-                    c1 * rand() * (p.pBest_bin - p.position_bin) + 
-                    c2 * rand() * (p.lBest_bin - p.position_bin)
-    
-    p.velocity_pot = w * p.velocity_pot + 
-                    c1 * rand() * (p.pBest_pot - p.position_pot) + 
-                    c2 * rand() * (p.lBest_pot - p.position_pot)
-    
-    # Actualizar posiciones
-    p.position_bin += p.velocity_bin
-    p.position_pot += p.velocity_pot
-    
-    # Discretizar binarias
-    for i in 1:p.nGeneradores
-        p.position_bin[i] = p.position_bin[i] >= 0.5 ? 1.0 : 0.0
-    end
-    
-    # Limitar potencias
-    datosGenerador = datos[2]
-    for i in 1:p.nGeneradores
-        p.position_pot[i,1] = clamp(p.position_pot[i,1], 
-                                  datosGenerador.P_MIN[i], 
-                                  datosGenerador.P_MAX[i])
-        p.position_pot[i,2] = clamp(p.position_pot[i,2], 
-                                  datosGenerador.Q_MIN[i], 
-                                  datosGenerador.Q_MAX[i])
     end
 end
 
@@ -156,8 +161,8 @@ function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
     # Actualizar mejor personal si corresponde
     if p.fitValue < p.fitpBest
         p.fitpBest = p.fitValue
-        p.pBest_bin = copy(p.position_bin)
-        p.pBest_pot = copy(p.position_pot)
+        p.pBest_u = copy(p.position_u)
+        p.pBest_pg = copy(p.position_pg)
     end
     return p
 end
@@ -165,8 +170,8 @@ end
 function updateBest!(p::ParticleHibrida)
     if p.fitValue < p.fitpBest
         p.fitpBest = p.fitValue
-        p.pBest_bin = copy(p.position_bin)
-        p.pBest_pot = copy(p.position_pot)
+        p.pBest_u = copy(p.position_u)
+        p.pBest_pg = copy(p.position_pg)
     end
     return p
 end
@@ -181,8 +186,8 @@ end
 function updatepBestAndFitpBest!(p::ParticleHibrida)
     if p.fitValue < p.fitpBest
         p.fitpBest = p.fitValue
-        p.pBest_bin = copy(p.position_bin)
-        p.pBest_pot = copy(p.position_pot)
+        p.pBest_u = copy(p.position_u)
+        p.pBest_pg = copy(p.position_pg)
     end
     nothing
 end
@@ -198,8 +203,8 @@ function updategBestAndFitgBest!(s::SwarmHibrido)
     fitgBest, index = findmin(gFits)
     
     if fitgBest < s.fitgBest
-        s.gBest_bin = copy(s.particles[index].position_bin)
-        s.gBest_pot = copy(s.particles[index].position_pot)
+        s.gBest_u = copy(s.particles[index].position_u)
+        s.gBest_pg = copy(s.particles[index].position_pg)
         s.fitgBest = fitgBest
     end
     nothing
@@ -212,8 +217,8 @@ function updatelBestAndFitlBest!(s::SwarmHibrido)
         fitlBest, index = findmin(neiborFits)
         
         if fitlBest < s.particles[i].fitlBest
-            s.particles[i].lBest_bin = copy(s.particles[neiborIds[index]].position_bin)
-            s.particles[i].lBest_pot = copy(s.particles[neiborIds[index]].position_pot)
+            s.particles[i].lBest_u = copy(s.particles[neiborIds[index]].position_u)
+            s.particles[i].lBest_pg = copy(s.particles[neiborIds[index]].position_pg)
             s.particles[i].fitlBest = fitlBest
         end
     end
@@ -271,29 +276,27 @@ function optimize!(s::SwarmHibrido)
     # println("\n=== Optimización completada ===")
     # println("Mejor fitness encontrado: ", s.fitgBest)
     
-    return s.gBest_bin, s.gBest_pot, s.fitgBest
+    return s.gBest_u, s.gBest_pg, s.fitgBest
 end
 
 function evaluarParticula(p::ParticleHibrida, datos::Tuple)
     datosLinea, datosGenerador, datosNodo, nNodos, nLineas, bMVA = datos
     
     # Extraer potencias activas y reactivas
-    potencias_P = p.position_pot[:,1]
-    potencias_Q = p.position_pot[:,2]
+    potencias_P = p.position_pg[:,1]
+    potencias_Q = p.position_pg[:,2]
+    estados_u = p.position_u  # Estado de los generadores
     
     # Evaluar tensiones y violaciones
     println("evaluarTensiones!")
     V_mag, violaciones = evaluarTensiones(datosLinea, datosGenerador, datosNodo,
-                                         nNodos, nLineas, float(bMVA), p.position_bin, potencias_P, potencias_Q)
-    # V_mag, violaciones = evaluarTensiones(  # Usar el nombre completo del módulo
-    #                                     datosLinea, datosGenerador, datosNodo, 
-    #                                     nNodos, nLineas, bMVA,
-    #                                     p.position_bin, potencias_P, potencias_Q)  
+                                         nNodos, nLineas, float(bMVA), 
+                                         potencias_P, potencias_Q, estados_u)
     
     # Calcular coste de generación    
     coste = 0.0
     for i in 1:p.nGeneradores
-        if p.position_bin[i] == 1
+        if p.position_u[i] >= 0.5  # Usar position_u para determinar si el generador está activo
             coste += datosGenerador.P_COSTE1[i] * potencias_P[i]
         end
     end
@@ -333,5 +336,6 @@ function runPSOHibrido(datos::Tuple, nParticle::Int, nInter::Int)
     
     # Inicializar y ejecutar
     initialize!(swarm)
-    optimize!(swarm)
+    gBest_u, gBest_pg, fitgBest = optimize!(swarm)
+    return gBest_u, gBest_pg, fitgBest
 end 

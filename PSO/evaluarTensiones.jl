@@ -1,8 +1,10 @@
 function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, datosNodo::DataFrame,
-    nNodos::Int64, nLineas::Int64, bMVA::Float64, generadores_activos::Vector{Float64}, 
-    potencias_P::Vector{Float64}, potencias_Q::Vector{Float64})
+    nNodos::Int64, nLineas::Int64, bMVA::Float64, potencias_P::Vector{Float64}, 
+    potencias_Q::Vector{Float64}, estados_u::Vector{Float64})
+
+    println("Potencias P: ", potencias_P)
+    println("Potencias Q: ", potencias_Q)
     
-    println("Construir la matriz de admitancias")
     Y = zeros(Complex{Float64}, nNodos, nNodos)    
 
     # Llenar la matriz Y con los datos de las líneas
@@ -10,10 +12,9 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
         from_bus = datosLinea.F_BUS[i]
         to_bus = datosLinea.T_BUS[i]
 
-        # Usar los nombres correctos de las columnas
-        r = datosLinea.R[i]  # Cambio de BR_R a R
-        x = datosLinea.X[i]  # Cambio de BR_X a X
-        b = datosLinea.BSh[i]  # Cambio de BR_B a BSh
+        r = datosLinea.R[i]
+        x = datosLinea.X[i]
+        b = datosLinea.BSh[i]
 
         y = 1/(r + im*x)
 
@@ -23,7 +24,17 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
         Y[from_bus,to_bus] -= y
         Y[to_bus,from_bus] -= y
     end
-    println("matriz Y rellenada")
+
+    # Ajustar potencias según estados (solo para el cálculo, no modifica los valores originales)
+    potencias_P_calc = copy(potencias_P)
+    potencias_Q_calc = copy(potencias_Q)
+    
+    for i in 1:length(potencias_P)
+        if estados_u[i] < 0.5  # Si el generador está apagado
+            potencias_P_calc[i] = 0.0
+            potencias_Q_calc[i] = 0.0
+        end
+    end
 
     # Inicializar vector de tensiones (flat start)
     V = ones(Complex{Float64}, nNodos)
@@ -47,10 +58,10 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
             # Potencia generada (si hay generador activo en el nodo)
             Pgen = 0.0
             Qgen = 0.0
-            for (idx, gen) in enumerate(datosGenerador.BUS)  # Cambio de GEN_BUS a BUS
-                if gen == i && generadores_activos[idx] == 1
-                    Pgen = potencias_P[idx]
-                    Qgen = potencias_Q[idx]
+            for (idx, gen) in enumerate(datosGenerador.BUS)
+                if gen == i
+                    Pgen = potencias_P_calc[idx]  # Usar las potencias calculadas
+                    Qgen = potencias_Q_calc[idx]
                 end
             end
 
@@ -78,9 +89,11 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
     # Calcular violaciones de límites de tensión
     violaciones = 0.0
     for i in 1:nNodos
-        Vmin = datosNodo.Vmin[i]  # Cambio de VMIN a Vmin
-        Vmax = datosNodo.Vmax[i]  # Cambio de VMAX a Vmax
+        Vmin = datosNodo.Vmin[i]
+        Vmax = datosNodo.Vmax[i]
         Vmag = abs(V[i])
+
+        println("Vmin: ", Vmin, " Vmax: ", Vmax, " Vmag: ", Vmag)
 
         if Vmag < Vmin
             violaciones += (Vmin - Vmag)^2
@@ -90,6 +103,22 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
     end
     println("violaciones: ", violaciones)
     println("V: ", V)
+
+    # Mostrar información de potencias y límites
+    println("\nInformación de Generadores:")
+    println("----------------------------")
+    for i in 1:length(potencias_P)
+        println("\nGenerador $i:")
+        println("Estado u: $(round(estados_u[i], digits=3))")
+        println("P inicial: $(round(potencias_P[i], digits=2)) MW")
+        println("Q inicial: $(round(potencias_Q[i], digits=2)) MVAr")
+        println("Límites P: [$(round(datosGenerador.P_MIN[i], digits=2)), $(round(datosGenerador.P_MAX[i], digits=2))] MW")
+        println("Límites Q: [$(round(datosGenerador.Q_MIN[i], digits=2)), $(round(datosGenerador.Q_MAX[i], digits=2))] MVAr")
+        println("P ajustada: $(round(potencias_P_calc[i], digits=2)) MW")
+        println("Q ajustada: $(round(potencias_Q_calc[i], digits=2)) MVAr")
+        println("Estado: $(estados_u[i] >= 0.5 ? "Encendido" : "Apagado")")
+    end
+    println("\n")
 
     return abs.(V), violaciones
 end
