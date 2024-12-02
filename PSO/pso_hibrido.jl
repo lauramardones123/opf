@@ -154,8 +154,8 @@ mutable struct SwarmHibrido
     end
 end
 
-function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
-    p.fitValue, _ = fitFunc(p, datos)
+function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple, log_file::Union{IOStream, Nothing}, log_enabled::Bool)
+    p.fitValue, _ = fitFunc(p, datos, log_file, log_enabled)
     p.nFitEval += 1
     
     # Actualizar mejor personal si corresponde
@@ -164,6 +164,11 @@ function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
         p.pBest_u = copy(p.position_u)
         p.pBest_pg = copy(p.position_pg)
     end
+    
+    if log_enabled
+        log_to_file(log_file, "fitValue: $(p.fitValue)", log_enabled)
+    end
+    
     return p
 end
 
@@ -176,9 +181,9 @@ function updateBest!(p::ParticleHibrida)
     return p
 end
 
-function initFitValue!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
+function initFitValue!(p::ParticleHibrida, fitFunc::Function, datos::Tuple, log_file::Union{IOStream, Nothing}=nothing, log_enabled::Bool=false)
     println("initFitValue!")
-    p.fitValue, _ = fitFunc(p, datos)
+    p.fitValue, _ = fitFunc(p, datos, log_file, log_enabled)
     p.nFitEval += 1
     nothing
 end
@@ -225,9 +230,9 @@ function updatelBestAndFitlBest!(s::SwarmHibrido)
     nothing
 end
 
-function initialize!(s::SwarmHibrido)
+function initialize!(s::SwarmHibrido, log_file::Union{IOStream, Nothing}=nothing, log_enabled::Bool=false)
     for particle in s.particles
-        initFitValue!(particle, s.fitFunc, s.datos)
+        initFitValue!(particle, s.fitFunc, s.datos, log_file, log_enabled)
         updatepBestAndFitpBest!(particle)
     end
     
@@ -237,20 +242,19 @@ function initialize!(s::SwarmHibrido)
     return s
 end
 
-function optimize!(s::SwarmHibrido)
-    println("\nIniciando PSO híbrido")
+function optimize!(s::SwarmHibrido, log_file::Union{IOStream, Nothing}, log_enabled::Bool)
+    log_to_file(log_file, "\nIniciando PSO híbrido", log_enabled)
     mejor_fitness_historico = Inf
     iteraciones_sin_mejora = 0
     
     for i in 1:s.nInter
-        println("\n=== Iteración $i ===")
-        println("Inercia actual: ", s.w)
+        log_to_file(log_file, "\n=== Iteración $i ===", log_enabled)
+        log_to_file(log_file, "Inercia actual: $(s.w)", log_enabled)
         
-        for p in s.particles
-            println("UpdatePosition!")
-            # updatePosition!()
+        for (j, p) in enumerate(s.particles)
+            log_to_file(log_file, "\nActualizando partícula $j", log_enabled)
             updatePosition!(p, s.w, s.c1, s.c2, s.datos)
-            evaluate!(p, s.fitFunc, s.datos)
+            evaluate!(p, s.fitFunc, s.datos, log_file, log_enabled)
         end
         
         updatelBestAndFitlBest!(s)
@@ -258,6 +262,7 @@ function optimize!(s::SwarmHibrido)
         
         if s.fitgBest < mejor_fitness_historico
             mejora = mejor_fitness_historico - s.fitgBest
+            log_to_file(log_file, "\nMejora encontrada: $mejora", log_enabled)
             mejor_fitness_historico = s.fitgBest
             iteraciones_sin_mejora = 0
         else
@@ -265,21 +270,14 @@ function optimize!(s::SwarmHibrido)
         end
         
         updateInertia!(s)
-        
-        # if i % 100 == 0
-        #     println("\n=== Resumen iteración $i ===")
-        #     println("Mejor fitness actual: ", s.fitgBest)
-        #     println("Iteraciones sin mejora: ", iteraciones_sin_mejora)
-        # end
+        log_to_file(log_file, "\nMejor fitness actual: $(s.fitgBest)", log_enabled)
+        log_to_file(log_file, "Iteraciones sin mejora: $iteraciones_sin_mejora", log_enabled)
     end
-    
-    # println("\n=== Optimización completada ===")
-    # println("Mejor fitness encontrado: ", s.fitgBest)
     
     return s.gBest_u, s.gBest_pg, s.fitgBest
 end
 
-function evaluarParticula(p::ParticleHibrida, datos::Tuple)
+function evaluarParticula(p::ParticleHibrida, datos::Tuple, log_file::Union{IOStream, Nothing}=nothing, log_enabled::Bool=false)
     datosLinea, datosGenerador, datosNodo, nNodos, nLineas, bMVA = datos
     
     # Extraer potencias activas y reactivas
@@ -291,7 +289,8 @@ function evaluarParticula(p::ParticleHibrida, datos::Tuple)
     println("evaluarTensiones!")
     V_mag, violaciones = evaluarTensiones(datosLinea, datosGenerador, datosNodo,
                                          nNodos, nLineas, float(bMVA), 
-                                         potencias_P, potencias_Q, estados_u)
+                                         potencias_P, potencias_Q, estados_u,
+                                         log_file, log_enabled)
     
     # Calcular coste de generación    
     coste = 0.0
@@ -326,9 +325,28 @@ function neiborIndices(i::Int, nNeibor::Int, nParticle::Int)
     indices
 end
 
+function log_to_file(log_file::Union{IOStream, Nothing}, message::String, log_enabled::Bool)
+    if log_enabled && !isnothing(log_file)
+        write(log_file, message * "\n")
+    end
+    println(message)
+end
 
-function runPSOHibrido(datos::Tuple, nParticle::Int, nInter::Int)
+function initialize_log(caso_estudio::String, log_enabled::Bool)
+    if log_enabled
+        timestamp = Dates.format(now(), "yyyy-mm-dd_HH-MM-SS")
+        log_filename = "logs/PSO_$(caso_estudio)_$(timestamp).log"
+        mkpath("logs")  # Crear directorio si no existe
+        return open(log_filename, "w")
+    end
+    return nothing
+end
+
+function runPSOHibrido(datos::Tuple, nParticle::Int, nInter::Int, log_enabled::Bool)
+    log_file = initialize_log(datos[end], log_enabled)  # datos[end] debería ser caso_estudio
+    
     nGeneradores = size(datos[2], 1)
+    log_to_file(log_file, "Iniciando PSO Híbrido con $nParticle partículas y $nInter iteraciones", log_enabled)
     
     # Crear enjambre
     swarm = SwarmHibrido(evaluarParticula, nGeneradores, datos, 
@@ -336,6 +354,11 @@ function runPSOHibrido(datos::Tuple, nParticle::Int, nInter::Int)
     
     # Inicializar y ejecutar
     initialize!(swarm)
-    gBest_u, gBest_pg, fitgBest = optimize!(swarm)
+    gBest_u, gBest_pg, fitgBest = optimize!(swarm, log_file, log_enabled)
+    
+    if log_enabled
+        close(log_file)
+    end
+    
     return gBest_u, gBest_pg, fitgBest
 end 

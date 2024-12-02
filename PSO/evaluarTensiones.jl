@@ -1,9 +1,11 @@
 function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, datosNodo::DataFrame,
     nNodos::Int64, nLineas::Int64, bMVA::Float64, potencias_P::Vector{Float64}, 
-    potencias_Q::Vector{Float64}, estados_u::Vector{Float64})
-
-    println("Potencias P: ", potencias_P)
-    println("Potencias Q: ", potencias_Q)
+    potencias_Q::Vector{Float64}, estados_u::Vector{Float64}, 
+    log_file::Union{IOStream, Nothing}, log_enabled::Bool)
+    
+    log_to_file(log_file, "\nEvaluando tensiones:", log_enabled)
+    log_to_file(log_file, "Potencias P: $potencias_P", log_enabled)
+    log_to_file(log_file, "Potencias Q: $potencias_Q", log_enabled)
     
     Y = zeros(Complex{Float64}, nNodos, nNodos)    
 
@@ -105,18 +107,18 @@ function evaluarTensiones(datosLinea::DataFrame, datosGenerador::DataFrame, dato
     println("V: ", V)
 
     # Mostrar información de potencias y límites
-    println("\nInformación de Generadores:")
-    println("----------------------------")
+    log_to_file(log_file, "\nInformación de Generadores:", log_enabled)
+    log_to_file(log_file, "----------------------------", log_enabled)
     for i in 1:length(potencias_P)
-        println("\nGenerador $i:")
-        println("Estado u: $(round(estados_u[i], digits=3))")
-        println("P inicial: $(round(potencias_P[i], digits=2)) MW")
-        println("Q inicial: $(round(potencias_Q[i], digits=2)) MVAr")
-        println("Límites P: [$(round(datosGenerador.P_MIN[i], digits=2)), $(round(datosGenerador.P_MAX[i], digits=2))] MW")
-        println("Límites Q: [$(round(datosGenerador.Q_MIN[i], digits=2)), $(round(datosGenerador.Q_MAX[i], digits=2))] MVAr")
-        println("P ajustada: $(round(potencias_P_calc[i], digits=2)) MW")
-        println("Q ajustada: $(round(potencias_Q_calc[i], digits=2)) MVAr")
-        println("Estado: $(estados_u[i] >= 0.5 ? "Encendido" : "Apagado")")
+        log_to_file(log_file, "\nGenerador $i:", log_enabled)
+        log_to_file(log_file, "Estado u: $(round(estados_u[i], digits=3))", log_enabled)
+        log_to_file(log_file, "P inicial: $(round(potencias_P[i], digits=2)) MW", log_enabled)
+        log_to_file(log_file, "Q inicial: $(round(potencias_Q[i], digits=2)) MVAr", log_enabled)
+        log_to_file(log_file, "Límites P: [$(round(datosGenerador.P_MIN[i], digits=2)), $(round(datosGenerador.P_MAX[i], digits=2))] MW", log_enabled)
+        log_to_file(log_file, "Límites Q: [$(round(datosGenerador.Q_MIN[i], digits=2)), $(round(datosGenerador.Q_MAX[i], digits=2))] MVAr", log_enabled)
+        log_to_file(log_file, "P ajustada: $(round(potencias_P_calc[i], digits=2)) MW", log_enabled)
+        log_to_file(log_file, "Q ajustada: $(round(potencias_Q_calc[i], digits=2)) MVAr", log_enabled)
+        log_to_file(log_file, "Estado: $(estados_u[i] >= 0.5 ? "Encendido" : "Apagado")", log_enabled)
     end
     println("\n")
 

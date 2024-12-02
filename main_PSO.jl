@@ -11,11 +11,11 @@ function ejecutar_optimizacion(caso_estudio::String, parametros::Dict)
     # Extraer parámetros
     n_particulas = parametros["n_particulas"]
     n_iteraciones = parametros["n_iteraciones"]
+    log_enabled = get(parametros, "log", false)
     
     println("\nExtrayendo datos...")
     datos = extraerDatos_PSO(caso_estudio)
-    println("Datos extraídos.")
-
+    
     if parametros["tipo_pso"] == "binario"
         println("\nGenerando PSO binario...")    
         n_dim = size(datos[2], 1)
@@ -24,12 +24,14 @@ function ejecutar_optimizacion(caso_estudio::String, parametros::Dict)
         return mejor_solucion, mejor_coste
     else            
         println("\nGenerando PSO híbrido...")
-        n_dim = size(datos[2], 1)
-        println("n_dim: ", n_dim)
-        mejor_estado, mejor_potencias, mejor_coste = runPSOHibrido(datos, n_particulas, n_iteraciones)
+        mejor_estado, mejor_potencias, mejor_coste = runPSOHibrido(
+            (datos..., caso_estudio), 
+            n_particulas, 
+            n_iteraciones,
+            log_enabled
+        )
         
-        # Para mantener compatibilidad con el formato anterior
-        mejor_solucion = mejor_estado .>= 0.5  # Convertir estados continuos a binarios
+        mejor_solucion = mejor_estado .>= 0.5
         return mejor_solucion, mejor_coste
     end
 end
@@ -44,7 +46,8 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "tipo_pso" => "hibrido",                   # "binario" o "hibrido"
         "n_particulas" => 4,                      # Número de partículas
         "n_iteraciones" => 3,                   # Número de iteraciones
-        "ejecutar_ac_opf" => 0                     # 0 para false, 1 para true
+        "ejecutar_ac_opf" => 0,                     # 0 para false, 1 para true
+        "log" => true
     )
 
     # Casos de estudio disponibles
