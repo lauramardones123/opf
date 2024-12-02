@@ -19,6 +19,7 @@ function ejecutar_optimizacion(caso_estudio::String, parametros::Dict)
     if parametros["tipo_pso"] == "binario"
         println("\nGenerando PSO binario...")    
         n_dim = size(datos[2], 1)
+        println("datos[2]: ", datos[2])
         mejor_solucion, mejor_coste = runPSO(fitFunc, n_dim, n_particulas, n_iteraciones, caso_estudio)
     else            
         println("\nGenerando PSO híbrido...")
@@ -49,7 +50,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "caso_estudio" => "EjemploTwitter_kyrib",  # Caso de estudio a resolver
         "tipo_pso" => "hibrido",                   # "binario" o "hibrido"
         "n_particulas" => 20,                      # Número de partículas
-        "n_iteraciones" => 1000,                   # Número de iteraciones
+        "n_iteraciones" => 3,                   # Número de iteraciones
         "ejecutar_ac_opf" => 0                     # 0 para false, 1 para true
     )
 
@@ -65,20 +66,20 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "pglib_opf_case1354_pegase"
     ]
 
-    try
+     # try
         mejor_solucion, mejor_coste = ejecutar_optimizacion(
-            parametros["caso_estudio"], 
+            parametros["caso_estudio"],  # TO DO: simplificar y que el argumento sea solo parametros
             parametros
         )
         
         # Guardar resultados si se desea
-        if parametros["guardar_resultados"]
-            # Aquí se puede añadir código para guardar los resultados
-            println("\nResultados guardados.")
-        end
+        # if parametros["guardar_resultados"]
+        #     # Aquí se puede añadir código para guardar los resultados
+        #     println("\nResultados guardados.")
+        # end
 
-    catch e
-        println("\nError durante la ejecución:")
-        println(e)
-    end
+    # catch e
+        # println("\nError durante la ejecución:")
+        # println(e)
+    # end
 end

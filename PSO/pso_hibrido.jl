@@ -62,60 +62,6 @@ mutable struct ParticleHibrida
             fitValue, fitpBest, fitlBest, nFitEval)
         # println("ParticleHibrida creada")
     end       
-
-    function updatePosition!(p::ParticleHibrida, w::Float, c1::Float, c2::Float, datos::Tuple)
-        # Actualizar velocidades
-        p.velocity_bin = w * p.velocity_bin + 
-                        c1 * rand() * (p.pBest_bin - p.position_bin) + 
-                        c2 * rand() * (p.lBest_bin - p.position_bin)
-        
-        p.velocity_pot = w * p.velocity_pot + 
-                        c1 * rand() * (p.pBest_pot - p.position_pot) + 
-                        c2 * rand() * (p.lBest_pot - p.position_pot)
-        
-        # Actualizar posiciones
-        p.position_bin += p.velocity_bin
-        p.position_pot += p.velocity_pot
-        
-        # Discretizar binarias
-        for i in 1:p.nGeneradores
-            p.position_bin[i] = p.position_bin[i] >= 0.5 ? 1.0 : 0.0
-        end
-        
-        # Limitar potencias
-        datosGenerador = datos[2]
-        for i in 1:p.nGeneradores
-            p.position_pot[i,1] = clamp(p.position_pot[i,1], 
-                                      datosGenerador.P_MIN[i], 
-                                      datosGenerador.P_MAX[i])
-            p.position_pot[i,2] = clamp(p.position_pot[i,2], 
-                                      datosGenerador.Q_MIN[i], 
-                                      datosGenerador.Q_MAX[i])
-        end
-        return p
-    end
-
-    function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
-        p.fitValue, _ = fitFunc(p, datos)
-        p.nFitEval += 1
-        
-        # Actualizar mejor personal si corresponde
-        if p.fitValue < p.fitpBest
-            p.fitpBest = p.fitValue
-            p.pBest_bin = copy(p.position_bin)
-            p.pBest_pot = copy(p.position_pot)
-        end
-        return p
-    end
-
-    function updateBest!(p::ParticleHibrida)
-        if p.fitValue < p.fitpBest
-            p.fitpBest = p.fitValue
-            p.pBest_bin = copy(p.position_bin)
-            p.pBest_pot = copy(p.position_pot)
-        end
-        return p
-    end
 end
 
 mutable struct SwarmHibrido
@@ -170,6 +116,59 @@ mutable struct SwarmHibrido
             c1, c2, wMax, wMin, w, gBest_bin, gBest_pot, fitgBest,
             particles, nFitEvals)
     end
+end
+
+function updatePosition!(p::ParticleHibrida, w::Float64, c1::Float64, c2::Float64, datos::Tuple)
+    # Actualizar velocidades
+    p.velocity_bin = w * p.velocity_bin + 
+                    c1 * rand() * (p.pBest_bin - p.position_bin) + 
+                    c2 * rand() * (p.lBest_bin - p.position_bin)
+    
+    p.velocity_pot = w * p.velocity_pot + 
+                    c1 * rand() * (p.pBest_pot - p.position_pot) + 
+                    c2 * rand() * (p.lBest_pot - p.position_pot)
+    
+    # Actualizar posiciones
+    p.position_bin += p.velocity_bin
+    p.position_pot += p.velocity_pot
+    
+    # Discretizar binarias
+    for i in 1:p.nGeneradores
+        p.position_bin[i] = p.position_bin[i] >= 0.5 ? 1.0 : 0.0
+    end
+    
+    # Limitar potencias
+    datosGenerador = datos[2]
+    for i in 1:p.nGeneradores
+        p.position_pot[i,1] = clamp(p.position_pot[i,1], 
+                                  datosGenerador.P_MIN[i], 
+                                  datosGenerador.P_MAX[i])
+        p.position_pot[i,2] = clamp(p.position_pot[i,2], 
+                                  datosGenerador.Q_MIN[i], 
+                                  datosGenerador.Q_MAX[i])
+    end
+end
+
+function evaluate!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
+    p.fitValue, _ = fitFunc(p, datos)
+    p.nFitEval += 1
+    
+    # Actualizar mejor personal si corresponde
+    if p.fitValue < p.fitpBest
+        p.fitpBest = p.fitValue
+        p.pBest_bin = copy(p.position_bin)
+        p.pBest_pot = copy(p.position_pot)
+    end
+    return p
+end
+
+function updateBest!(p::ParticleHibrida)
+    if p.fitValue < p.fitpBest
+        p.fitpBest = p.fitValue
+        p.pBest_bin = copy(p.position_bin)
+        p.pBest_pot = copy(p.position_pot)
+    end
+    return p
 end
 
 function initFitValue!(p::ParticleHibrida, fitFunc::Function, datos::Tuple)
@@ -242,8 +241,11 @@ function optimize!(s::SwarmHibrido)
         println("\n=== Iteración $i ===")
         println("Inercia actual: ", s.w)
         
-        for (j, p) in enumerate(s.particles)
-            updateParticle!(p, s.w, s.c1, s.c2, s.datos)
+        for p in s.particles
+            println("UpdatePosition!")
+            # updatePosition!()
+            updatePosition!(p, s.w, s.c1, s.c2, s.datos)
+            evaluate!(p, s.fitFunc, s.datos)
         end
         
         updatelBestAndFitlBest!(s)
