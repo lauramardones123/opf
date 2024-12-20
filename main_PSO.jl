@@ -45,7 +45,7 @@ if abspath(PROGRAM_FILE) == @__FILE__
         "caso_estudio" => "EjemploTwitter_kyrib",  # Caso de estudio a resolver
         "tipo_pso" => "hibrido",                   # "binario" o "hibrido"
         "n_particulas" => 4,                      # Número de partículas
-        "n_iteraciones" => 3,                   # Número de iteraciones
+        "n_iteraciones" => 100,                   # Número de iteraciones
         "ejecutar_ac_opf" => 0,                     # 0 para false, 1 para true
         "log" => true
     )
@@ -53,13 +53,15 @@ if abspath(PROGRAM_FILE) == @__FILE__
     # Casos de estudio disponibles
     casos_disponibles = [
         "EjemploTwitter_kyrib",
+        "EjemploTwitter_kyrib_2",
         "pglib_opf_case3_lmbd",
         "pglib_opf_case5_pjm",
         "pglib_opf_case14_ieee",
         "pglib_opf_case30_ieee",
         "pglib_opf_case118_ieee",
         "pglib_opf_case300_ieee",
-        "pglib_opf_case1354_pegase"
+        "pglib_opf_case1354_pegase",
+        "problema_chatGPT"
     ]
 
      # try

@@ -1,0 +1,791 @@
+Iniciando PSO Híbrido con 4 partículas y 3 iteraciones
+
+Iniciando PSO híbrido
+
+=== Iteración 1 ===
+Inercia actual: 0.9
+
+Actualizando partícula 1
+fitValue: Inf
+
+Actualizando partícula 2
+
+Evaluando tensiones:
+Potencias P: [419.92254124530547, 214.59524576987306, 242.3847473743831]
+Potencias Q: [-75.71590641130271, -57.02832983452684, 47.007401138313924]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -56.3842°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -51.858°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -56.968°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-56.3842°
+V[2] = 1.0∠-51.858°
+V[3] = 1.0∠-56.968°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.191
+P inicial: 419.92 MW
+Q inicial: -75.72 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 2:
+Estado u: 0.545
+P inicial: 214.6 MW
+Q inicial: -57.03 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 214.6 MW
+Q ajustada: -57.03 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.0
+P inicial: 242.38 MW
+Q inicial: 47.01 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 78.98 MVA
+Flujo S_ji: 78.98 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 10.19 MVA
+Flujo S_ji: 10.19 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 89.16 MVA
+Flujo S_ji: 89.16 MVA
+Límite: 1000.0 MVA
+fitValue: 4291.9120580300805
+
+Actualizando partícula 3
+
+Evaluando tensiones:
+Potencias P: [326.94763615839855, 197.79801451181504, 10.0]
+Potencias Q: [37.68937651238509, -36.97806866111404, 61.81803963499246]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -53.8079°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -78.6221°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -124.4437°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-53.8079°
+V[2] = 1.0∠-78.6221°
+V[3] = 1.0∠-124.4437°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.846
+P inicial: 326.95 MW
+Q inicial: 37.69 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 326.95 MW
+Q ajustada: 37.69 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.198
+P inicial: 197.8 MW
+Q inicial: -36.98 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 3:
+Estado u: 0.891
+P inicial: 10.0 MW
+Q inicial: 61.82 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 10.0 MW
+Q ajustada: 61.82 MVAr
+Estado: Encendido
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 429.71 MVA
+Flujo S_ji: 429.71 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 1156.23 MVA
+Flujo S_ji: 1156.23 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 778.6 MVA
+Flujo S_ji: 778.6 MVA
+Límite: 1000.0 MVA
+fitValue: 267036.1314001059
+
+Actualizando partícula 4
+
+Evaluando tensiones:
+Potencias P: [361.1949691409189, 192.47180258502632, 18.82782648167378]
+Potencias Q: [30.347177303958574, 71.2073937260449, -8.642941237334512]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -70.3378°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -117.9976°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -76.8569°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-70.3378°
+V[2] = 1.0∠-117.9976°
+V[3] = 1.0∠-76.8569°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.263
+P inicial: 361.19 MW
+Q inicial: 30.35 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 2:
+Estado u: 0.502
+P inicial: 192.47 MW
+Q inicial: 71.21 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 192.47 MW
+Q ajustada: 71.21 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.651
+P inicial: 18.83 MW
+Q inicial: -8.64 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 18.83 MW
+Q ajustada: -8.64 MVAr
+Estado: Encendido
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 808.05 MVA
+Flujo S_ji: 808.05 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 113.72 MVA
+Flujo S_ji: 113.72 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 702.71 MVA
+Flujo S_ji: 702.71 MVA
+Límite: 1000.0 MVA
+fitValue: 7883.770945549892
+
+Mejora encontrada: Inf
+
+Mejor fitness actual: 3894.3638018399415
+Iteraciones sin mejora: 0
+
+=== Iteración 2 ===
+Inercia actual: 0.7333333333333334
+
+Actualizando partícula 1
+
+Evaluando tensiones:
+Potencias P: [330.6618129490121, 175.33695734178474, 73.01207674633505]
+Potencias Q: [30.87986818422021, 74.24201394927252, -7.35095198442786]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -53.7564°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -116.3593°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -73.1218°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-53.7564°
+V[2] = 1.0∠-116.3593°
+V[3] = 1.0∠-73.1218°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.686
+P inicial: 330.66 MW
+Q inicial: 30.88 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 330.66 MW
+Q ajustada: 30.88 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.806
+P inicial: 175.34 MW
+Q inicial: 74.24 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 175.34 MW
+Q ajustada: 74.24 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.542
+P inicial: 73.01 MW
+Q inicial: -7.35 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 73.01 MW
+Q ajustada: -7.35 MVAr
+Estado: Encendido
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 1039.08 MVA
+Flujo S_ji: 1039.08 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 336.38 MVA
+Flujo S_ji: 336.38 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 736.86 MVA
+Flujo S_ji: 736.86 MVA
+Límite: 1000.0 MVA
+fitValue: 35725.34167267299
+
+Actualizando partícula 2
+fitValue: Inf
+
+Actualizando partícula 3
+
+Evaluando tensiones:
+Potencias P: [313.92377334217696, 197.79801451181504, 10.0]
+Potencias Q: [40.48152956292257, -36.97806866111404, 29.4189626472658]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -52.1785°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -85.6601°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -122.517°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-52.1785°
+V[2] = 1.0∠-85.6601°
+V[3] = 1.0∠-122.517°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.817
+P inicial: 313.92 MW
+Q inicial: 40.48 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 313.92 MW
+Q ajustada: 40.48 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.221
+P inicial: 197.8 MW
+Q inicial: -36.98 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 3:
+Estado u: 0.858
+P inicial: 10.0 MW
+Q inicial: 29.42 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 10.0 MW
+Q ajustada: 29.42 MVAr
+Estado: Encendido
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 576.09 MVA
+Flujo S_ji: 576.09 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 1151.99 MVA
+Flujo S_ji: 1151.99 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 632.24 MVA
+Flujo S_ji: 632.24 MVA
+Límite: 1000.0 MVA
+fitValue: 264966.2823761682
+
+Actualizando partícula 4
+
+Evaluando tensiones:
+Potencias P: [361.1949691409189, 192.47180258502632, 18.82782648167378]
+Potencias Q: [30.347177303958574, 71.2073937260449, -8.642941237334512]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -54.6114°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -116.3974°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -73.3868°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-54.6114°
+V[2] = 1.0∠-116.3974°
+V[3] = 1.0∠-73.3868°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.556
+P inicial: 361.19 MW
+Q inicial: 30.35 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 361.19 MW
+Q ajustada: 30.35 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.635
+P inicial: 192.47 MW
+Q inicial: 71.21 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 192.47 MW
+Q ajustada: 71.21 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.397
+P inicial: 18.83 MW
+Q inicial: -8.64 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 1026.87 MVA
+Flujo S_ji: 1026.87 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 326.23 MVA
+Flujo S_ji: 326.23 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 733.17 MVA
+Flujo S_ji: 733.17 MVA
+Límite: 1000.0 MVA
+fitValue: 27605.884418561
+
+Mejor fitness actual: 3894.3638018399415
+Iteraciones sin mejora: 1
+
+=== Iteración 3 ===
+Inercia actual: 0.5666666666666668
+
+Actualizando partícula 1
+
+Evaluando tensiones:
+Potencias P: [408.3930546489886, 250.0, 10.0]
+Potencias Q: [29.523744915969093, 57.40535072160306, -10.874647138496856]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -52.6639°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -113.4373°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -70.7918°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-52.6639°
+V[2] = 1.0∠-113.4373°
+V[3] = 1.0∠-70.7918°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.659
+P inicial: 408.39 MW
+Q inicial: 29.52 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 408.39 MW
+Q ajustada: 29.52 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.916
+P inicial: 250.0 MW
+Q inicial: 57.41 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 250.0 MW
+Q ajustada: 57.41 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.576
+P inicial: 10.0 MW
+Q inicial: -10.87 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 10.0 MW
+Q ajustada: -10.87 MVAr
+Estado: Encendido
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 1011.67 MVA
+Flujo S_ji: 1011.67 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 315.07 MVA
+Flujo S_ji: 315.07 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 727.24 MVA
+Flujo S_ji: 727.24 MVA
+Límite: 1000.0 MVA
+fitValue: 28725.11631424536
+
+Actualizando partícula 2
+
+Evaluando tensiones:
+Potencias P: [419.92254124530547, 184.66977478450798, 242.3847473743831]
+Potencias Q: [-75.71590641130271, -21.307352979718303, 47.007401138313924]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -42.7589°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -38.4787°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -43.3496°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-42.7589°
+V[2] = 1.0∠-38.4787°
+V[3] = 1.0∠-43.3496°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.48
+P inicial: 419.92 MW
+Q inicial: -75.72 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 2:
+Estado u: 0.944
+P inicial: 184.67 MW
+Q inicial: -21.31 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 184.67 MW
+Q ajustada: -21.31 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.405
+P inicial: 242.38 MW
+Q inicial: 47.01 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 74.68 MVA
+Flujo S_ji: 74.68 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 10.31 MVA
+Flujo S_ji: 10.31 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 84.99 MVA
+Flujo S_ji: 84.99 MVA
+Límite: 1000.0 MVA
+fitValue: 3693.414799913594
+
+Actualizando partícula 3
+
+Evaluando tensiones:
+Potencias P: [313.92377334217696, 189.17423232653624, 10.0]
+Potencias Q: [40.48152956292257, 100.0, 29.4189626472658]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -73.445°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -118.5028°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -74.4853°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-73.445°
+V[2] = 1.0∠-118.5028°
+V[3] = 1.0∠-74.4853°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.212
+P inicial: 313.92 MW
+Q inicial: 40.48 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 2:
+Estado u: 0.936
+P inicial: 189.17 MW
+Q inicial: 100.0 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 189.17 MW
+Q ajustada: 100.0 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.092
+P inicial: 10.0 MW
+Q inicial: 29.42 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 766.3 MVA
+Flujo S_ji: 766.3 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 18.16 MVA
+Flujo S_ji: 18.16 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 749.5 MVA
+Flujo S_ji: 749.5 MVA
+Límite: 1000.0 MVA
+fitValue: 3796.787266624977
+
+Actualizando partícula 4
+
+Evaluando tensiones:
+Potencias P: [361.1949691409189, 192.47180258502632, 18.82782648167378]
+Potencias Q: [30.347177303958574, 71.2073937260449, -8.642941237334512]
+
+Nodo 1:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -54.6114°
+
+Nodo 2:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -116.3974°
+
+Nodo 3:
+Magnitud de tensión: 1.0 p.u.
+Ángulo de tensión: -73.3868°
+
+Violaciones totales: 0.0
+
+Tensiones completas (p.u.):
+V[1] = 1.0∠-54.6114°
+V[2] = 1.0∠-116.3974°
+V[3] = 1.0∠-73.3868°
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.665
+P inicial: 361.19 MW
+Q inicial: 30.35 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 361.19 MW
+Q ajustada: 30.35 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.683
+P inicial: 192.47 MW
+Q inicial: 71.21 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 192.47 MW
+Q ajustada: 71.21 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.303
+P inicial: 18.83 MW
+Q inicial: -8.64 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Evaluando flujos de potencia:
+
+Línea 1 (1->2):
+Flujo S_ij: 1026.87 MVA
+Flujo S_ji: 1026.87 MVA
+Límite: 1000.0 MVA
+
+Línea 2 (1->3):
+Flujo S_ij: 326.23 MVA
+Flujo S_ji: 326.23 MVA
+Límite: 10.0 MVA
+
+Línea 3 (2->3):
+Flujo S_ij: 733.17 MVA
+Flujo S_ji: 733.17 MVA
+Límite: 1000.0 MVA
+fitValue: 27605.884418561
+
+Mejora encontrada: 200.9490019263476
+
+Mejor fitness actual: 3693.414799913594
+Iteraciones sin mejora: 0

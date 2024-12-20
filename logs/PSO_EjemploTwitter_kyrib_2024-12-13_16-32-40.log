@@ -1,0 +1,176 @@
+Iniciando PSO Híbrido con 4 partículas y 3 iteraciones
+
+Iniciando PSO híbrido
+
+=== Iteración 1 ===
+Inercia actual: 0.9
+
+Actualizando partícula 1
+
+Evaluando tensiones:
+Potencias P: [275.92100728794145, 114.14369218978842, 47.60172432641281]
+Potencias Q: [-65.52803598774533, 21.214841576571246, 15.824122650399431]
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.868
+P inicial: 275.92 MW
+Q inicial: -65.53 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 275.92 MW
+Q ajustada: -65.53 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 1.0
+P inicial: 114.14 MW
+Q inicial: 21.21 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 114.14 MW
+Q ajustada: 21.21 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.036
+P inicial: 47.6 MW
+Q inicial: 15.82 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+fitValue: 8942.730911452481
+
+Actualizando partícula 2
+
+Evaluando tensiones:
+Potencias P: [244.723363273262, 242.637363206828, 216.18227899826405]
+Potencias Q: [-15.746290458714984, 45.10649683180995, -7.048664723844439]
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.637
+P inicial: 244.72 MW
+Q inicial: -15.75 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 244.72 MW
+Q ajustada: -15.75 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.431
+P inicial: 242.64 MW
+Q inicial: 45.11 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 3:
+Estado u: 0.0
+P inicial: 216.18 MW
+Q inicial: -7.05 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+fitValue: 4894.46726546524
+
+Actualizando partícula 3
+
+Evaluando tensiones:
+Potencias P: [247.66176045693507, 214.36949306027898, 158.10075680824403]
+Potencias Q: [13.964346090349192, -46.438483960284586, 69.82042227853756]
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.745
+P inicial: 247.66 MW
+Q inicial: 13.96 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 247.66 MW
+Q ajustada: 13.96 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 0.0
+P inicial: 214.37 MW
+Q inicial: -46.44 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+
+Generador 3:
+Estado u: 0.438
+P inicial: 158.1 MW
+Q inicial: 69.82 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+fitValue: 4953.235209138701
+
+Actualizando partícula 4
+
+Evaluando tensiones:
+Potencias P: [269.5745147624108, 56.881107417574924, 200.61079585130472]
+Potencias Q: [-44.9168190152623, 5.438872914243198, 48.26634843382135]
+
+Información de Generadores:
+----------------------------
+
+Generador 1:
+Estado u: 0.775
+P inicial: 269.57 MW
+Q inicial: -44.92 MVAr
+Límites P: [10.0, 500.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 269.57 MW
+Q ajustada: -44.92 MVAr
+Estado: Encendido
+
+Generador 2:
+Estado u: 1.0
+P inicial: 56.88 MW
+Q inicial: 5.44 MVAr
+Límites P: [10.0, 250.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 56.88 MW
+Q ajustada: 5.44 MVAr
+Estado: Encendido
+
+Generador 3:
+Estado u: 0.0
+P inicial: 200.61 MW
+Q inicial: 48.27 MVAr
+Límites P: [10.0, 450.0] MW
+Límites Q: [-100.0, 100.0] MVAr
+P ajustada: 0.0 MW
+Q ajustada: 0.0 MVAr
+Estado: Apagado
+fitValue: 7097.923517775464
+
+Mejora encontrada: Inf
+
+Mejor fitness actual: 4894.46726546524
+Iteraciones sin mejora: 0
+
+=== Iteración 2 ===
+Inercia actual: 0.7333333333333334
+
+Actualizando partícula 1
